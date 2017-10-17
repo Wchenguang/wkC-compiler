@@ -8,7 +8,7 @@ enum TOKENTYPE{
     TkVoid,         //void
     TkChar,         //char
     TkInt,          //int
-    TkFloat,        //float
+    //TkFloat,        //float
     TkSizeof,       //sizeof
     TkStatic,       //static
     TkConst,        //const
@@ -30,7 +30,7 @@ enum TOKENTYPE{
     TkMulti,        //*
     TkDivide,       // /
     TkMod,          //%
-    TkDot,          //.
+    //TkDot,          //.
     TkAssign,       //=
     TkLeftBracket,  //(
     TkRightBracket, //)

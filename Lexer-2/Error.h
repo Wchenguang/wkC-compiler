@@ -9,32 +9,38 @@ using namespace std;
 class Error{
 
 public:
-    static void strTooLong(){
+    static void strTooLong(int currentLine){
+        cout<<"Error line "<<currentLine<<" : ";
         cout<<"string too long max: "<<MAXSTRLENGTH<<endl;
         exit(-1);
     }
     
-    static void charNoContent(){
+    static void charNoContent(int currentLine){
+        cout<<"Error line "<<currentLine<<" : ";
         cout<<"expected statement"<<endl;
         exit(-1);
     }
     
-    static void charNotMatch(){
+    static void charNotMatch(int currentLine){
+        cout<<"Error line "<<currentLine<<" : ";
         cout<<"expected \'"<<endl;
         exit(-1);
     }
     
-    static void strNotMatch(){
+    static void strNotMatch(int currentLine){
+        cout<<"Error line "<<currentLine<<" : ";
         cout<<"expected \""<<endl;
         exit(-1);
     }
     
-    static void ErrNotEqual(){
+    static void ErrNotEqual(int currentLine){
+        cout<<"Error line "<<currentLine<<" : ";
         cout<<"expected = after !"<<endl;
         exit(-1);
     }
     
-    static void notKnownChar(){
+    static void notKnownChar(int currentLine){
+        cout<<"Error line "<<currentLine<<" : ";
         cout<<"not known char"<<endl;
         exit(-1);
     }

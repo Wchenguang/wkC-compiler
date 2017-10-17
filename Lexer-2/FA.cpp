@@ -7,7 +7,7 @@
 using namespace std;
 
 //判断是否是空白
-bool FA::isSpace(char ch){
+bool FA::isSpace(char ch, int &currentLine){
     /*if(ch == ' ')
         cout<<"空白"<<endl;
     if(ch == '\n')
@@ -16,6 +16,8 @@ bool FA::isSpace(char ch){
         cout<<"tab"<<endl;
     if(ch == '\r')
         cout<<"ok"<<endl;*/
+    if(ch == '\n')
+        ++currentLine;
     if(ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\377')
         return true;
     //cout<<ch<<endl;
@@ -36,10 +38,10 @@ bool FA::isLetter(char c){
 }
 
 //预处理跳过空白自动机
-void FA::skipSpace(char &ch, fstream &file){
-    if(isSpace(ch) && !file.eof()){
+void FA::skipSpace(char &ch, fstream &file, int &currentLine){
+    if(isSpace(ch, currentLine) && !file.eof()){
         ch = file.get();
-        skipSpace(ch, file);
+        skipSpace(ch, file, currentLine);
     }
 }
 
@@ -70,35 +72,35 @@ void FA::getNums(char &ch, fstream &file, string &destStr){
 }
 
 //识别单引号括起的单个字符
-void FA::getChar(char &ch, fstream &file, string &destStr){
+void FA::getChar(char &ch, fstream &file, string &destStr, Lexer &lexer){
     destStr.push_back(ch);
     if(file.eof())
-        Error::charNotMatch();
+        Error::charNotMatch(lexer.getCurrentLine());
     ch = file.get();
     if(ch == '\'')
-        Error::charNoContent();
+        Error::charNoContent(lexer.getCurrentLine());
     destStr.push_back(ch);
     if(file.eof())
-        Error::charNotMatch();
+        Error::charNotMatch(lexer.getCurrentLine());
     ch = file.get();
     if(ch != '\'')
-        Error::charNotMatch();
+        Error::charNotMatch(lexer.getCurrentLine());
     destStr.push_back(ch);
     if(!file.eof())
         ch = file.get();
 }
 
 //识别双引号括起的字符串
-void FA::getString(char &ch, fstream &file, string &destStr){
+void FA::getString(char &ch, fstream &file, string &destStr, Lexer &lexer){
     destStr.push_back(ch);
     if(file.eof())
-        Error::strNotMatch();
+        Error::strNotMatch(lexer.getCurrentLine());
     ch = file.get();
     
     while(ch != '\"'){
         destStr.push_back(ch);
         if(file.eof())
-            Error::strNotMatch();
+            Error::strNotMatch(lexer.getCurrentLine());
         ch = file.get();
     }
     destStr.push_back(ch);

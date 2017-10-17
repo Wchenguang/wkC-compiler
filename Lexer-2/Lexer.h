@@ -6,7 +6,6 @@
 #include <fstream>
 
 #include "Token.h"
-#include "FA.h"
 #include "CDEFINE.h"
 
 using namespace std;
@@ -21,6 +20,8 @@ public:
     fstream             file;               //文件流
     
     int                 index;              //getToken 的指针位置
+
+    int                 currentLine;        //当前访问行
     
     //字符串哈希
     int hashVal(const string &str);
@@ -49,15 +50,14 @@ public:
     Lexer(const char *path);
     
     //顺序获取单词 等待完成
-    Token *getToken(){
-        if(index < tokenList.size())
-            return tokenList[index++];
-        return NULL;
-    }
+    Token *getToken();
     
     //单词表是否到尽头
-    bool eof(){
-        return index >= tokenList.size();
+    bool eof();
+
+    //获取当前访问行
+    int &getCurrentLine(){
+        return currentLine;
     }
     
 };

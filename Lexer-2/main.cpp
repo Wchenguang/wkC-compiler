@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, const char * argv[]) {
     
     
-    Lexer l("//Users//wk1997//Documents//a.c");
+    Lexer l("/Users/wk1997/Documents/GitHub/wkC-compiler/test.c");
     
     
     while (!l.eof()) {

@@ -2,6 +2,7 @@
 #include "CDEFINE.h"
 
 #include "Error.h"
+#include "FA.h"
 
 //字符串哈希
 int Lexer::hashVal(const string &str){
@@ -50,8 +51,8 @@ Token *Lexer::isTokenExist(const string &str){
 void Lexer::initKeyWord(){
     directInsert("void", TkVoid);
     directInsert("char", TkChar);
-    directInsert("int", TkChar);
-    directInsert("float", TkFloat);
+    directInsert("int", TkInt);
+    //directInsert("float", TkFloat);
     directInsert("sizeof", TkSizeof);
     directInsert("static", TkStatic);
     directInsert("const", TkConst);
@@ -73,7 +74,7 @@ void Lexer::initKeyWord(){
     directInsert("*", TkMulti);
     directInsert("/", TkDivide);
     directInsert("%", TkMod);
-    directInsert(".", TkDot);
+    //directInsert(".", TkDot);
     directInsert("=", TkAssign);
     directInsert("(", TkLeftBracket);
     directInsert(")", TkRightBracket);
@@ -92,7 +93,7 @@ bool Lexer::getCh(char &ch){
 //开始词法分析 融合了预处理
 void Lexer::analyze(){
     file.open(filePath.c_str(), std::fstream::in);
-    
+
     if(!file)
         return;
     
@@ -103,7 +104,7 @@ void Lexer::analyze(){
         string      destStr;
         
         //跳过空白,将ch置为第一个非空符
-        FA::skipSpace(ch, file);
+        FA::skipSpace(ch, file, currentLine);
         if(file.eof())
             break;
         
@@ -120,11 +121,11 @@ void Lexer::analyze(){
             destTokenType = TkNum;
             
         }else if(ch == '\''){
-            FA::getChar(ch, file, destStr);
+            FA::getChar(ch, file, destStr, *this);
             destTokenType = TkSChar;
             
         }else if(ch == '\"'){
-            FA::getString(ch, file, destStr);
+            FA::getString(ch, file, destStr, *this);
             destTokenType = TkStr;
             
         }else if(ch == ';'){
@@ -162,7 +163,7 @@ void Lexer::analyze(){
             if(!getCh(ch))
                 continue;
             if(ch != '=')
-                Error::ErrNotEqual();
+                Error::ErrNotEqual(currentLine);
             destStr.push_back(ch);
             if(!getCh(ch))
                 continue;
@@ -197,13 +198,13 @@ void Lexer::analyze(){
             if(!getCh(ch))
                 continue;
             
-        }else if(ch == '.'){
+        }/*else if(ch == '.'){
             destStr.push_back(ch);
             destTokenType = TkDot;
             if(!getCh(ch))
                 continue;
             
-        }else if(ch == '('){
+        }*/else if(ch == '('){
             destStr.push_back(ch);
             destTokenType = TkLeftBracket;
             if(!getCh(ch))
@@ -228,7 +229,7 @@ void Lexer::analyze(){
                 continue;
             
         }else{
-            Error::notKnownChar();
+            Error::notKnownChar(currentLine);
         }
         
         //将解析出的字符串以默认方法插入哈希表，并添加至链表尾部
@@ -243,7 +244,20 @@ void Lexer::analyze(){
 //文件路径初始化，暂时只能绝对路径 mac？
 Lexer::Lexer(const char *path){
     index = 0;
+    currentLine = 1;
     filePath.assign(path);
     initKeyWord();
     analyze();
+}
+
+//顺序获取单词 等待完成
+Token *Lexer::getToken(){
+    if(index < tokenList.size())
+        return tokenList[index++];
+    return NULL;
+}
+
+//单词表是否到尽头
+bool Lexer::eof(){
+    return index >= tokenList.size();
 }
