@@ -39,9 +39,9 @@ public:
         exit(-1);
     }
     
-    static void notKnownChar(int currentLine){
+    static void notKnownChar(int currentLine, char ch){
         cout<<"Error line "<<currentLine<<" : ";
-        cout<<"not known char"<<endl;
+        cout<<"not known char "<<ch<<endl;
         exit(-1);
     }
 };

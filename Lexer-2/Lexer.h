@@ -59,7 +59,10 @@ public:
     int &getCurrentLine(){
         return currentLine;
     }
-    
+
+    //用于测试
+    //通过tokenType获取类型并输出至控制台
+    void getTypeStr(TOKENTYPE tokentype);
 };
 
 #endif

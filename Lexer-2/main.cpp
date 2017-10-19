@@ -7,6 +7,8 @@
 
 using namespace std;
 
+
+
 int main(int argc, const char * argv[]) {
     
     
@@ -15,8 +17,10 @@ int main(int argc, const char * argv[]) {
     
     while (!l.eof()) {
         Token *token = l.getToken();
-        printf("%d ", token);
-        cout<<token->c_str()<<endl;
+        printf("%- 20s", token->c_str());
+        l.getTypeStr(token->getTokenType());
+        printf(" at %d ", token);
+        cout<<endl;
     }
     
     return 0;

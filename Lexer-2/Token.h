@@ -16,6 +16,10 @@ public:
         sourceStr.assign(str);
         tokenType = type;
     }
+
+    TOKENTYPE getTokenType(){
+        return tokenType;
+    }
     
     bool operator==(const Token &token){
         return token.sourceStr == sourceStr;

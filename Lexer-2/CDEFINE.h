@@ -31,6 +31,7 @@ enum TOKENTYPE{
     TkDivide,       // /
     TkMod,          //%
     //TkDot,          //.
+    TkComma,        //,
     TkAssign,       //=
     TkLeftBracket,  //(
     TkRightBracket, //)

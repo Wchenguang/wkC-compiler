@@ -1,3 +1,5 @@
+#include <cstdio>
+
 #include "Lexer.h"
 #include "CDEFINE.h"
 
@@ -75,6 +77,7 @@ void Lexer::initKeyWord(){
     directInsert("/", TkDivide);
     directInsert("%", TkMod);
     //directInsert(".", TkDot);
+    directInsert(",", TkComma);
     directInsert("=", TkAssign);
     directInsert("(", TkLeftBracket);
     directInsert(")", TkRightBracket);
@@ -204,7 +207,13 @@ void Lexer::analyze(){
             if(!getCh(ch))
                 continue;
             
-        }*/else if(ch == '('){
+        }*/else if(ch == ','){
+            destStr.push_back(ch);
+            destTokenType = TkComma;
+            if(!getCh(ch))
+                continue;
+
+        }else if(ch == '('){
             destStr.push_back(ch);
             destTokenType = TkLeftBracket;
             if(!getCh(ch))
@@ -229,7 +238,7 @@ void Lexer::analyze(){
                 continue;
             
         }else{
-            Error::notKnownChar(currentLine);
+            Error::notKnownChar(currentLine, ch);
         }
         
         //将解析出的字符串以默认方法插入哈希表，并添加至链表尾部
@@ -260,4 +269,25 @@ Token *Lexer::getToken(){
 //单词表是否到尽头
 bool Lexer::eof(){
     return index >= tokenList.size();
+}
+
+/*******************************************/
+//用于测试
+//通过tokenType获取类型并输出至控制台
+void Lexer::getTypeStr(TOKENTYPE tokentype){
+    string res("");
+    if(tokentype >= TkVoid && tokentype <= TkWhile){
+        res.assign("keyWord");
+    }else if(tokentype >= TkSingleQuote && tokentype <= TkRightBrace){
+        res.assign("separator");
+    }else if(tokentype == TkId){
+        res.assign("identifier");
+    }else if(tokentype == TkNum){
+        res.assign("number");
+    }else if(tokentype == TkSChar){
+        res.assign("charavter");
+    }else if(tokentype == TkStr){
+        res.assign("string");
+    }
+    printf("%- 20s", res.c_str());
 }
